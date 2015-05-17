@@ -5,6 +5,7 @@ Default user commands:
  - (r) - refresh
  - (right arrow) - previous bus/train
  - (left arrow) - next bus/train
+ - (ESC) - exit program
 
 
 File Changables.py also contains all the variables that can be changed according to user's likings. 
