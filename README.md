@@ -1,6 +1,11 @@
 # VozniRed
 Aplikacija za nazorni prikaz prihoda naslednjega vlaka in busa v Ljubjani.
 
+HOW TO START:
+ - install dependencies for python: pygame, feedparser, urllib2
+ - run main.py
+ - see the magic happen
+
 Default user commands:
  - (r) - refresh
  - (right arrow) - previous bus/train
