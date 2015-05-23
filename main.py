@@ -31,12 +31,6 @@ class HIDvisuals:
 		self.TrainPic = pygame.image.load('Train.png')
 		self.TrainPic = pygame.transform.scale(self.TrainPic, (CH.PicWCOF, CH.PicHCOF))
 
-		#stops text render
-		self.TrainStartText = self.FONT.render(CH.TrainStart, 1, (255, 255, 255))
-		self.TStartTextpos = self.TrainStartText.get_rect()
-		self.TrainStopText = self.FONT.render(CH.TrainStop, 1, (255, 255, 255))
-		self.TStopTextpos = self.TrainStopText.get_rect()
-
 
 
 	def UserActions(self):
@@ -58,43 +52,83 @@ class HIDvisuals:
 		self.screen.blit(self.BusPic,(CH.FrameW/2-CH.PicWCOF/2,CH.FrameH/4-CH.PicHCOF/2))
 		self.screen.blit(self.TrainPic,(CH.FrameW/2-CH.PicWCOF/2,3*CH.FrameH/4-CH.PicHCOF/2))
 
+		#stops text render
+		TrainStartText = self.FONT.render(CH.TrainStart, 1, (255, 255, 255))
+		TStartTextpos = TrainStartText.get_rect()
+		TrainStopText = self.FONT.render(CH.TrainStop, 1, (255, 255, 255))
+		TStopTextpos = TrainStopText.get_rect()
+
 		# train position stops Text
-		Tx = self.TStartTextpos.centerx
-		Ty = self.TStartTextpos.centery
-		self.screen.blit(self.TrainStartText,(CH.FrameW/4-Tx, 2*CH.FrameH/3-Ty))
-		Tx = self.TStopTextpos.centerx
-		Ty = self.TStopTextpos.centery
-		self.screen.blit(self.TrainStopText,(3*CH.FrameW/4-Tx, 2*CH.FrameH/3-Ty))
+		Tx = TStartTextpos.centerx
+		Ty = TStartTextpos.centery
+		self.screen.blit(TrainStartText,(CH.FrameW/4-Tx, 2*CH.FrameH/3-Ty))
+		Tx = TStopTextpos.centerx
+		Ty = TStopTextpos.centery
+		self.screen.blit(TrainStopText,(3*CH.FrameW/4-Tx, 2*CH.FrameH/3-Ty))
 
-		# train time text
-		self.TDepTime = self.FONT.render(NextTrain[0], 1, (255, 255, 255))
-		self.TDepTextpos = self.TDepTime.get_rect()
+		# train text
+		TDepTime = self.FONT.render(NextTrain[0], 1, (255, 255, 255))
+		TDepTextpos = TDepTime.get_rect()
 
-		self.TArrTime = self.FONT.render(NextTrain[1], 1, (255, 255, 255))
-		self.TArrTextpos = self.TArrTime.get_rect()
+		TArrTime = self.FONT.render(NextTrain[1], 1, (255, 255, 255))
+		TArrTextpos = TArrTime.get_rect()
 
-		Tx = self.TDepTextpos.centerx
-		Ty = self.TDepTextpos.centery
-		self.screen.blit(self.TDepTime,(CH.FrameW/4-Tx,3*CH.FrameH/4-Ty))
+		Tx =TDepTextpos.centerx
+		Ty =TDepTextpos.centery
+		self.screen.blit(TDepTime,(CH.FrameW/4-Tx,3*CH.FrameH/4-Ty))
 
-		Tx = self.TArrTextpos.centerx
-		Ty = self.TArrTextpos.centery
-		self.screen.blit(self.TArrTime,(3*CH.FrameW/4-Tx,3*CH.FrameH/4-Ty))
+		Tx = TArrTextpos.centerx
+		Ty = TArrTextpos.centery
+		self.screen.blit(TArrTime,(3*CH.FrameW/4-Tx,3*CH.FrameH/4-Ty))
 
 		#train timeleft text
-		self.TimeLeft = self.FONT.render("In " + NextTrain[2] + " min", 1, (255, 255, 255))
-		self.TimeLeftpos = self.TimeLeft.get_rect()
-		Tx = self.TimeLeftpos.centerx
-		Ty = self.TimeLeftpos.centery
-		self.screen.blit(self.TimeLeft,(CH.FrameW/2-Tx,9*CH.FrameH/10-Ty))
+		TimeLeft = self.FONT.render("In " + NextTrain[2] + " min", 1, (255, 255, 255))
+		TimeLeftpos = TimeLeft.get_rect()
+		Tx = TimeLeftpos.centerx
+		Ty = TimeLeftpos.centery
+		self.screen.blit(TimeLeft,(CH.FrameW/2-Tx,9*CH.FrameH/10-Ty))
 
-		#trains skipped text
-		self.SkipTrainsText = self.FONT.render("Skipped " + str(CH.SkipTrains) + " trains", 1, (80, 80, 80))
-		self.SkipTrainsTextpos = self.SkipTrainsText.get_rect()
-		Tx = self.SkipTrainsTextpos.centerx
-		Ty = self.SkipTrainsTextpos.centery
-		self.screen.blit(self.SkipTrainsText,(CH.FrameW/2-Tx,CH.FrameH-Ty*2))
+		#bus stops text render
+		BStartText = self.FONT.render(CH.BusStation, 1, (255, 255, 255))
+		BStartTextPos = BStartText.get_rect()
+		BDirText = self.FONT.render(CH.BusDirection, 1, (255, 255, 255))
+		BDirTextPos = BDirText.get_rect()
+		BNumText = self.FONT.render(str(CH.BusNum), 1, (255, 255, 255))
+		BNumTextPos = BNumText.get_rect()
+		DirText1 = self.FONT.render("Start Station:", 1, (255, 255, 255))
+		DirText2 = self.FONT.render("Direction:", 1, (255, 255, 255))
 
+
+		#bus text position
+		Tx = BNumTextPos.centerx
+		Ty = BNumTextPos.centery
+		self.screen.blit(BNumText,(CH.FrameW/2-Tx,Ty*4))
+
+		Tx = BStartTextPos.centerx
+		Ty = BStartTextPos.centery
+		self.screen.blit(DirText1,(CH.FrameW/4-Tx, CH.FrameH/6-Ty))
+		self.screen.blit(BStartText,(CH.FrameW/4-Tx, CH.FrameH/4-Ty))
+
+		Tx = BDirTextPos.centerx
+		Ty = BDirTextPos.centery
+		self.screen.blit(DirText2,(3*CH.FrameW/4-Tx, CH.FrameH/6-Ty))
+		self.screen.blit(BDirText,(3*CH.FrameW/4-Tx, CH.FrameH/4-Ty))
+
+
+		#Bus time left 
+		BTimeLeft = self.FONT.render("In " + "[INPUT TIME]" + " min", 1, (255, 255, 255))
+		BTimeLeftPos = BTimeLeft.get_rect()
+		Tx = BTimeLeftPos.centerx
+		Ty = BTimeLeftPos.centery
+		self.screen.blit(BTimeLeft,(CH.FrameW/2-Tx, CH.FrameH/2-Ty))
+
+
+		#trains/buses skipped text
+		SkipText = self.FONT.render("Skipped " + str(CH.Skip) + " trains and buses", 1, (80, 80, 80))
+		SkipTrainsPos = SkipText.get_rect()
+		Tx = SkipTrainsPos.centerx
+		Ty = SkipTrainsPos.centery
+		self.screen.blit(SkipText,(CH.FrameW/2-Tx,CH.FrameH-Ty*2))
 
 
 		pygame.display.flip()	
@@ -112,10 +146,10 @@ if __name__ == '__main__':
 	HID.Init()
 
 
-	SkipTrains = 0
+	Skip = 0
 	ESC = False
 	while(1):
-		NextTrain = VR2.GetTrainTime(CH.TrainStart, CH.TrainStop, CH.SkipTrains)
+		NextTrain = VR2.GetTrainTime(CH.TrainStart, CH.TrainStop, CH.Skip)
 
 		HID.Frame(NextTrain)
 
@@ -134,13 +168,13 @@ if __name__ == '__main__':
 
 			if Key == K_RIGHT:
 				HID.Frame(("...", "...", "..."))
-				CH.SkipTrains += 1
+				CH.Skip += 1
 				break
 
 			if Key == K_LEFT:
 				HID.Frame(("...", "...", "..."))
-				if(CH.SkipTrains>=1):
-					CH.SkipTrains -= 1
+				if(CH.Skip>=1):
+					CH.Skip -= 1
 				break
 
 			
