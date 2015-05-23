@@ -3,6 +3,8 @@ import feedparser
 import sys
 import time
 from Changables import * 
+import os
+import string
 
 
 
@@ -147,12 +149,75 @@ class VozniRed2:
 		return "0","0","0"
 						
 
-	#def GetBusTime(self, SkipBuses):
+	def GetBusTime(self, Station, BusDir, BusNum):
+		#Get data from internet
+		Command = os.popen("curl -iH 'Accept: application/json' http://www.trola.si/"+ Station)
+		MSG = Command.read()
+		Command.close()
+
+		print MSG
+		#parse MSG
+
+		#find BusStation in MSG
+		TMP =  self.WordInString(Station , MSG)
+		if(TMP != 0):
+			#find Direction of bus in MSG
+			TMP = self.WordInString(BusDir, MSG,TMP)
+			if(TMP):
+				#find BusNum in MSG
+				TMP = self.WordInString(str(BusNum), MSG, TMP)
+				if(TMP):
+					TMP = self.WordInString('arrivals": [', MSG, TMP)
+					if(TMP):
+						TMP2 = self.WordInString(']', MSG, TMP)
+						if(TMP2):
+							return "In " + MSG[TMP+1:TMP2] + " min"
+
+
+			else:
+				print MSG
+				print " "
+				return "No Direction found with that name. Look for it in this output and copy it to Changables.py"
+
+			return "Data valid"
+		else:
+			return "No station found with that name"
+
+		return "Error"
+				
+
+
+	def WordInString(self, Word, String, StartLetterNum = 0, NumOfLettersCheck = 0):
+		"""lib which finds a word in a string. It returns a)number of last letter of word, if word is found, b)0 if word not found.
+			#lib takes in as arguments:
+				- Word: word you are looking for (string type)
+				- String: string you are looking the Word in (string type)
+				- StartLetterNum: The number of letter in String from where on you want to search the Word from
+				- NumOfLettersCheck: Number of letters in String you want to include in your search. It takes all as default
+		"""
+		#set number of letters in String which you are going to check. Default = all
+		NOLC = len(String)
+		if(NumOfLettersCheck):
+			NOLC = NumOfLettersCheck + StartLetterNum
+			
+		#start parsing
+		for i in range(StartLetterNum, NOLC):
+			LCount = 0
+			for j in range(0,len(Word)):
+				if(String[i+j] == Word[j]):
+					LCount +=1
+					if(LCount == len(Word)):
+						return i+j
+				else:
+					LCount = 0
+					break
+
+		return 0
 
 if __name__ == '__main__':
 	VR2 = VozniRed2()
+	print VR2.GetBusTime(CH.BusStation, CH.BusDirection, CH.BusNum)
 
-	VR2.GetTrainTimesFromServer(CH.TrainStart, CH.TrainStop)
 
 
 		

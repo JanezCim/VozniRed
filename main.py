@@ -14,14 +14,18 @@ class HIDvisuals:
 	OLDKeyPress = 0
 	ToReturn = 0
 
+	__slots__ = ['NextTrainText', 'NextBusText']
+
+
 
 	def Init(self):
+		self.NextTrainText = ["0","0","0"]
+		self.NextBusText = "0"
 
 		pygame.init()
 		pygame.display.set_caption('IOTGUI')
 
 		self.screen=pygame.display.set_mode((CH.FrameW, CH.FrameH))
-
 
 		self.FONT = pygame.font.Font(None,CH.TextSize)
 
@@ -45,7 +49,9 @@ class HIDvisuals:
 		return self.ToReturn
 
 
-	def Frame(self, NextTrain):
+
+
+	def Frame(self):
 		self.screen.fill((0,0,0))
 
 		#position the pictures
@@ -67,10 +73,10 @@ class HIDvisuals:
 		self.screen.blit(TrainStopText,(3*CH.FrameW/4-Tx, 2*CH.FrameH/3-Ty))
 
 		# train text
-		TDepTime = self.FONT.render(NextTrain[0], 1, (255, 255, 255))
+		TDepTime = self.FONT.render(self.NextTrainText[0], 1, (255, 255, 255))
 		TDepTextpos = TDepTime.get_rect()
 
-		TArrTime = self.FONT.render(NextTrain[1], 1, (255, 255, 255))
+		TArrTime = self.FONT.render(self.NextTrainText[1], 1, (255, 255, 255))
 		TArrTextpos = TArrTime.get_rect()
 
 		Tx =TDepTextpos.centerx
@@ -82,7 +88,7 @@ class HIDvisuals:
 		self.screen.blit(TArrTime,(3*CH.FrameW/4-Tx,3*CH.FrameH/4-Ty))
 
 		#train timeleft text
-		TimeLeft = self.FONT.render("In " + NextTrain[2] + " min", 1, (255, 255, 255))
+		TimeLeft = self.FONT.render("In " + self.NextTrainText[2] + " min", 1, (255, 255, 255))
 		TimeLeftpos = TimeLeft.get_rect()
 		Tx = TimeLeftpos.centerx
 		Ty = TimeLeftpos.centery
@@ -116,7 +122,7 @@ class HIDvisuals:
 
 
 		#Bus time left 
-		BTimeLeft = self.FONT.render("In " + "[INPUT TIME]" + " min", 1, (255, 255, 255))
+		BTimeLeft = self.FONT.render(self.NextBusText, 1, (255, 255, 255))
 		BTimeLeftPos = BTimeLeft.get_rect()
 		Tx = BTimeLeftPos.centerx
 		Ty = BTimeLeftPos.centery
@@ -124,7 +130,7 @@ class HIDvisuals:
 
 
 		#trains/buses skipped text
-		SkipText = self.FONT.render("Skipped " + str(CH.Skip) + " trains and buses", 1, (80, 80, 80))
+		SkipText = self.FONT.render("Skipped " + str(CH.Skip) + " trains", 1, (80, 80, 80))
 		SkipTrainsPos = SkipText.get_rect()
 		Tx = SkipTrainsPos.centerx
 		Ty = SkipTrainsPos.centery
@@ -149,9 +155,10 @@ if __name__ == '__main__':
 	Skip = 0
 	ESC = False
 	while(1):
-		NextTrain = VR2.GetTrainTime(CH.TrainStart, CH.TrainStop, CH.Skip)
+		HID.NextTrainText = VR2.GetTrainTime(CH.TrainStart, CH.TrainStop, CH.Skip)
+		HID.NextBusText = VR2.GetBusTime(CH.BusStation, CH.BusDirection, CH.BusNum)
 
-		HID.Frame(NextTrain)
+		HID.Frame()
 
 		#at the end of for() it will refresh 
 		for i in range(0,50):
@@ -163,16 +170,19 @@ if __name__ == '__main__':
 
 			#if key r is pressed or one pinute has passed
 			if Key == K_r:
-				HID.Frame(("...", "...", "..."))
+				HID.NextTrainText = ("...", "...", "...")
+				HID.Frame()
 				break
 
 			if Key == K_RIGHT:
-				HID.Frame(("...", "...", "..."))
+				HID.NextTrainText = ("...", "...", "...")
+				HID.Frame()
 				CH.Skip += 1
 				break
 
 			if Key == K_LEFT:
-				HID.Frame(("...", "...", "..."))
+				HID.NextTrainText = ("...", "...", "...")
+				HID.Frame()
 				if(CH.Skip>=1):
 					CH.Skip -= 1
 				break
